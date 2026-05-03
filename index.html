@@ -46,7 +46,7 @@
       .card {
         width: 100%;
         max-width: 1200px;
-        height: 80vh;
+        height: 90vh;
         background-color: #141414;
         border-radius: 24px;
         overflow: hidden;
@@ -119,7 +119,7 @@
           "left      center-t  center-t  right"
           "left      mid-l     mid-r     right";
         grid-template-columns: 1fr 2fr 2fr 1fr;
-        grid-template-rows: 0.4fr 1fr;
+        grid-template-rows: 0.2fr 1fr;
         position: relative;
       }
 
@@ -177,6 +177,27 @@
         justify-content: space-between;
         padding: 24px 0;
       }
+
+      .screenshot-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        min-height: 0;
+      }
+
+      .feature-screenshot {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        image-rendering: pixelated;
+        transition: opacity 150ms ease;
+      }
+
+      .feature-screenshot.switching { opacity: 0; }
 
       .mid-r {
         grid-area: mid-r;
@@ -461,12 +482,14 @@
           grid-template-areas:
             "center-t center-t"
             "mid-l    mid-r";
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1.4fr 1fr;
           grid-template-rows: auto 1fr;
         }
 
         .left, .right { display: none; }
         .center-t h1 { font-size: 22px; }
+
+        .screenshot-wrapper { flex: none; height: 220px; padding: 4px; }
 
         #page-pricing {
           grid-template-areas:
@@ -517,7 +540,7 @@
             "mid-l"
             "mid-r";
           grid-template-columns: 1fr;
-          grid-template-rows: auto 1fr 1fr;
+          grid-template-rows: auto auto 1fr;
         }
 
         .center-t h1 { font-size: 18px; }
@@ -525,9 +548,10 @@
         .mid-l {
           border-right: none;
           border-bottom: 0.1px solid #e0e0e0;
-          flex-direction: row;
           padding: 20px 0;
         }
+
+        .screenshot-wrapper { height: 260px; }
 
         .mid-r { padding-bottom: 80px; }
 
@@ -607,6 +631,10 @@
               <div class="pa-row" style="left:29.25px;top:26px;   width:6.5px;"></div>
             </div>
           </div>
+          <div class="screenshot-wrapper">
+            <img id="featureScreenshot" class="feature-screenshot" src="screenshots/home.png" alt="App screenshot" />
+          </div>
+
           <div class="pixel-arrow" id="arrow-down">
             <div class="pixel-arrow-layer pa-shadow">
               <div class="pa-row" style="left:0px;    top:0px;    width:65px;"></div>
@@ -834,12 +862,30 @@
       });
 
       const featureItems = document.querySelectorAll('.feature-item');
+      const screenshot   = document.getElementById('featureScreenshot');
       let activeIndex = 0;
+
+      const screenshots = [
+        'screenshots/home.png',
+        'screenshots/tasks.png',
+        'screenshots/timer.png',
+        'screenshots/distractions.png',
+        'screenshots/task streak.png',
+        'screenshots/streak calendar.png',
+        'screenshots/leaderboard.png',
+        'screenshots/avatar.png',
+      ];
 
       function setActive(index) {
         featureItems[activeIndex].classList.remove('active');
         activeIndex = Math.max(0, Math.min(featureItems.length - 1, index));
         featureItems[activeIndex].classList.add('active');
+
+        screenshot.classList.add('switching');
+        setTimeout(() => {
+          screenshot.src = screenshots[activeIndex];
+          screenshot.classList.remove('switching');
+        }, 150);
       }
 
       featureItems.forEach((item, i) => item.addEventListener('click', () => setActive(i)));
