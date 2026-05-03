@@ -343,6 +343,38 @@
       }
 
       .right     { grid-area: right;    border-left:   0.1px solid #e0e0e0; }
+
+      .bor-peaking {
+        position: absolute;
+        bottom: -10px;
+        right: 40px;
+        width: 180px;
+        image-rendering: pixelated;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      @media (max-width: 768px) {
+        .bor-peaking {
+          width: 110px;
+          right: auto;
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: -6px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .bor-peaking {
+          width: 110px;
+          right: auto;
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: -6px;
+        }
+
+        .mid-r { padding-bottom: 80px; }
+      }
     </style>
   </head>
   <body>
@@ -437,6 +469,7 @@
         </div>
       </div>
       <div class="right"></div>
+      <img src="bor-peaking.png" class="bor-peaking" alt="BOR peeking" />
     </div>
     <script>
       const navLinks = document.querySelectorAll('.nav-links a');
