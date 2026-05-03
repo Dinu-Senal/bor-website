@@ -30,13 +30,14 @@
         background-color: #141414;
         border-radius: 24px;
         overflow: hidden;
+        position: relative;
         display: grid;
         grid-template-areas:
           "header    header    header    header"
           "left      center-t  center-t  right"
           "left      mid-l     mid-r     right";
         grid-template-columns: 1fr 2fr 2fr 1fr;
-        grid-template-rows: 60px 1fr 1fr;
+        grid-template-rows: 60px 0.4fr 1fr;
       }
 
       .header {
@@ -87,9 +88,147 @@
         align-items: center;
       }
 
+      /* ── Hamburger ── */
+      .nav-hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+      }
+
+      .nav-hamburger span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background-color: #e0e0e0;
+        transition: transform 200ms ease, opacity 200ms ease;
+      }
+
+      .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+      .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+      /* ── Responsive ── */
+      @media (max-width: 768px) {
+        body { padding: 16px; }
+
+        .card {
+          grid-template-areas:
+            "header   header"
+            "center-t center-t"
+            "mid-l    mid-r";
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 60px auto 1fr;
+        }
+
+        .left, .right { display: none; }
+
+        .center-t h1 { font-size: 22px; }
+
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: 60px;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          align-items: flex-start;
+          background-color: #141414;
+          border-bottom: 0.1px solid #e0e0e0;
+          padding: 20px 24px;
+          gap: 18px;
+          z-index: 10;
+          font-size: 11px;
+        }
+
+        .nav-links.open { display: flex; }
+        .nav-sep { display: none; }
+        .nav-hamburger { display: flex; }
+      }
+
+      @media (max-width: 480px) {
+        .nav-brand { font-size: 14px; }
+        .card {
+          border-radius: 16px;
+          grid-template-areas:
+            "header"
+            "center-t"
+            "mid-l"
+            "mid-r";
+          grid-template-columns: 1fr;
+          grid-template-rows: 60px auto 1fr 1fr;
+        }
+
+        .center-t h1 { font-size: 18px; }
+
+        .mid-l {
+          border-right: none;
+          border-bottom: 0.1px solid #e0e0e0;
+          flex-direction: row;
+          padding: 20px 0;
+        }
+      }
+
       .left      { grid-area: left;     border-right:  0.1px solid #e0e0e0; }
-      .center-t  { grid-area: center-t; border-bottom: 0.1px solid #e0e0e0; }
-      .mid-l     { grid-area: mid-l;    border-right:  0.1px solid #e0e0e0; }
+      .center-t {
+        grid-area: center-t;
+        border-bottom: 0.1px solid #e0e0e0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+      }
+
+      .center-t h1 {
+        font-family: "Silkscreen", monospace;
+        font-size: 32px;
+        color: #e0e0e0;
+        line-height: 1.6;
+        max-width: 640px;
+      }
+
+      /* ── Pixel Arrow ── */
+      .pixel-arrow {
+        position: relative;
+        width: 65px;
+        height: 32.5px;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .pixel-arrow-layer {
+        position: absolute;
+        inset: 0;
+        transition: transform 200ms ease, opacity 200ms ease;
+      }
+
+      .pixel-arrow-layer .pa-row {
+        position: absolute;
+        height: 6.5px;
+      }
+
+      .pa-front .pa-row   { background-color: #e0e0e0; }
+      .pa-shadow .pa-row  { background-color: #e0e0e090; }
+
+      .pixel-arrow.pressed .pa-front  { transform: translateX(1.3px); }
+      .pixel-arrow.pressed .pa-shadow { transform: translateX(-1.3px); opacity: 0; }
+      .mid-l {
+        grid-area: mid-l;
+        border-right: 0.1px solid #e0e0e0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 0;
+      }
+
+      .pixel-arrow.flip { transform: scaleY(-1); }
+
       .mid-r     { grid-area: mid-r; }
       .right     { grid-area: right;    border-left:   0.1px solid #e0e0e0; }
     </style>
@@ -109,25 +248,83 @@
           <a href="#">TERMS</a>
         </nav>
 
-        <div class="nav-icon">
-          <img src="skelly-green.png" alt="BOR mascot" width="24" height="24" style="image-rendering: pixelated;" />
+        <div style="display:flex; align-items:center; gap:16px;">
+          <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="nav-icon">
+            <img src="skelly-green.png" alt="BOR mascot" width="24" height="24" style="image-rendering: pixelated;" />
+          </div>
         </div>
       </div>
 
       <div class="left"></div>
-      <div class="center-t"></div>
-      <div class="mid-l"></div>
+      <div class="center-t">
+        <h1>Gain control of your life by focusing on what matters_</h1>
+      </div>
+      <div class="mid-l">
+        <!-- up arrow (down arrow flipped) -->
+        <div class="pixel-arrow flip" data-arrow>
+          <div class="pixel-arrow-layer pa-shadow">
+            <div class="pa-row" style="left:0px;    top:0px;    width:65px;"></div>
+            <div class="pa-row" style="left:6.5px;  top:6.5px;  width:52px;"></div>
+            <div class="pa-row" style="left:13px;   top:13px;   width:39px;"></div>
+            <div class="pa-row" style="left:19.5px; top:19.5px; width:26px;"></div>
+            <div class="pa-row" style="left:22.75px;top:26px;   width:19.5px;"></div>
+          </div>
+          <div class="pixel-arrow-layer pa-front">
+            <div class="pa-row" style="left:6.5px;  top:0px;    width:52px;"></div>
+            <div class="pa-row" style="left:13px;   top:6.5px;  width:39px;"></div>
+            <div class="pa-row" style="left:19.5px; top:13px;   width:26px;"></div>
+            <div class="pa-row" style="left:26px;   top:19.5px; width:13px;"></div>
+            <div class="pa-row" style="left:29.25px;top:26px;   width:6.5px;"></div>
+          </div>
+        </div>
+        <!-- down arrow -->
+        <div class="pixel-arrow" data-arrow>
+          <div class="pixel-arrow-layer pa-shadow">
+            <div class="pa-row" style="left:0px;    top:0px;    width:65px;"></div>
+            <div class="pa-row" style="left:6.5px;  top:6.5px;  width:52px;"></div>
+            <div class="pa-row" style="left:13px;   top:13px;   width:39px;"></div>
+            <div class="pa-row" style="left:19.5px; top:19.5px; width:26px;"></div>
+            <div class="pa-row" style="left:22.75px;top:26px;   width:19.5px;"></div>
+          </div>
+          <div class="pixel-arrow-layer pa-front">
+            <div class="pa-row" style="left:6.5px;  top:0px;    width:52px;"></div>
+            <div class="pa-row" style="left:13px;   top:6.5px;  width:39px;"></div>
+            <div class="pa-row" style="left:19.5px; top:13px;   width:26px;"></div>
+            <div class="pa-row" style="left:26px;   top:19.5px; width:13px;"></div>
+            <div class="pa-row" style="left:29.25px;top:26px;   width:6.5px;"></div>
+          </div>
+        </div>
+      </div>
       <div class="mid-r"></div>
       <div class="right"></div>
     </div>
     <script>
       const navLinks = document.querySelectorAll('.nav-links a');
+      const navMenu  = document.querySelector('.nav-links');
+      const hamburger = document.getElementById('hamburger');
+
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        navMenu.classList.toggle('open');
+      });
+
       navLinks.forEach(link => {
         link.addEventListener('click', e => {
           e.preventDefault();
           navLinks.forEach(l => l.classList.remove('active'));
           link.classList.add('active');
+          hamburger.classList.remove('open');
+          navMenu.classList.remove('open');
         });
+      });
+
+      document.querySelectorAll('.pixel-arrow').forEach(arrow => {
+        arrow.addEventListener('pointerdown', () => arrow.classList.add('pressed'));
+        arrow.addEventListener('pointerup',   () => arrow.classList.remove('pressed'));
+        arrow.addEventListener('pointerleave',() => arrow.classList.remove('pressed'));
       });
     </script>
   </body>
