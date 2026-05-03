@@ -8,11 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet" />
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
 
       body {
         min-height: 100vh;
@@ -23,25 +19,23 @@
         padding: 32px;
       }
 
+      /* ── Card ── */
       .card {
         width: 100%;
         max-width: 1200px;
-        min-height: 80vh;
+        height: 80vh;
         background-color: #141414;
         border-radius: 24px;
         overflow: hidden;
         position: relative;
-        display: grid;
-        grid-template-areas:
-          "header    header    header    header"
-          "left      center-t  center-t  right"
-          "left      mid-l     mid-r     right";
-        grid-template-columns: 1fr 2fr 2fr 1fr;
-        grid-template-rows: 60px 0.4fr 1fr;
+        display: flex;
+        flex-direction: column;
       }
 
+      /* ── Header ── */
       .header {
-        grid-area: header;
+        flex-shrink: 0;
+        height: 60px;
         border-bottom: 0.1px solid #e0e0e0;
         display: flex;
         align-items: center;
@@ -50,11 +44,7 @@
         font-family: "Silkscreen", monospace;
       }
 
-      .nav-brand {
-        color: #e0e0e0;
-        font-size: 18px;
-        letter-spacing: 0.05em;
-      }
+      .nav-brand { color: #e0e0e0; font-size: 18px; letter-spacing: 0.05em; }
 
       .nav-links {
         display: flex;
@@ -64,29 +54,11 @@
         letter-spacing: 0.08em;
       }
 
-      .nav-links a {
-        color: #e0e0e0;
-        text-decoration: none;
-        transition: color 0.2s ease;
-      }
-
-      .nav-links a:hover {
-        color: #83bc91;
-      }
-
-      .nav-links a.active {
-        color: #83bc91;
-      }
-
-      .nav-sep {
-        color: #e0e0e0;
-        user-select: none;
-      }
-
-      .nav-icon {
-        display: flex;
-        align-items: center;
-      }
+      .nav-links a { color: #e0e0e0; text-decoration: none; transition: color 0.2s ease; }
+      .nav-links a:hover { color: #83bc91; }
+      .nav-links a.active { color: #83bc91; }
+      .nav-sep { color: #e0e0e0; user-select: none; }
+      .nav-icon { display: flex; align-items: center; }
 
       /* ── Hamburger ── */
       .nav-hamburger {
@@ -112,68 +84,23 @@
       .nav-hamburger.open span:nth-child(2) { opacity: 0; }
       .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-      /* ── Responsive ── */
-      @media (max-width: 768px) {
-        body { padding: 16px; }
+      /* ── Page system ── */
+      .page { flex: 1; display: none; min-height: 0; }
+      .page.active { display: grid; }
 
-        .card {
-          grid-template-areas:
-            "header   header"
-            "center-t center-t"
-            "mid-l    mid-r";
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: 60px auto 1fr;
-        }
-
-        .left, .right { display: none; }
-
-        .center-t h1 { font-size: 22px; }
-
-        .nav-links {
-          display: none;
-          position: absolute;
-          top: 60px;
-          left: 0;
-          right: 0;
-          flex-direction: column;
-          align-items: flex-start;
-          background-color: #141414;
-          border-bottom: 0.1px solid #e0e0e0;
-          padding: 20px 24px;
-          gap: 18px;
-          z-index: 10;
-          font-size: 11px;
-        }
-
-        .nav-links.open { display: flex; }
-        .nav-sep { display: none; }
-        .nav-hamburger { display: flex; }
+      /* ── Home page ── */
+      #page-home {
+        grid-template-areas:
+          "left      center-t  center-t  right"
+          "left      mid-l     mid-r     right";
+        grid-template-columns: 1fr 2fr 2fr 1fr;
+        grid-template-rows: 0.4fr 1fr;
+        position: relative;
       }
 
-      @media (max-width: 480px) {
-        .nav-brand { font-size: 14px; }
-        .card {
-          border-radius: 16px;
-          grid-template-areas:
-            "header"
-            "center-t"
-            "mid-l"
-            "mid-r";
-          grid-template-columns: 1fr;
-          grid-template-rows: 60px auto 1fr 1fr;
-        }
+      .left     { grid-area: left;     border-right:  0.1px solid #e0e0e0; }
+      .right    { grid-area: right;    border-left:   0.1px solid #e0e0e0; }
 
-        .center-t h1 { font-size: 18px; }
-
-        .mid-l {
-          border-right: none;
-          border-bottom: 0.1px solid #e0e0e0;
-          flex-direction: row;
-          padding: 20px 0;
-        }
-      }
-
-      .left      { grid-area: left;     border-right:  0.1px solid #e0e0e0; }
       .center-t {
         grid-area: center-t;
         border-bottom: 0.1px solid #e0e0e0;
@@ -182,6 +109,7 @@
         align-items: center;
         justify-content: center;
         gap: 28px;
+        padding: 24px;
       }
 
       .center-t h1 {
@@ -207,16 +135,14 @@
         transition: transform 200ms ease, opacity 200ms ease;
       }
 
-      .pixel-arrow-layer .pa-row {
-        position: absolute;
-        height: 6.5px;
-      }
-
-      .pa-front .pa-row   { background-color: #e0e0e0; }
-      .pa-shadow .pa-row  { background-color: #e0e0e090; }
+      .pixel-arrow-layer .pa-row { position: absolute; height: 6.5px; }
+      .pa-front .pa-row  { background-color: #e0e0e0; }
+      .pa-shadow .pa-row { background-color: #e0e0e090; }
 
       .pixel-arrow.pressed .pa-front  { transform: translateX(1.3px); }
       .pixel-arrow.pressed .pa-shadow { transform: translateX(-1.3px); opacity: 0; }
+      .pixel-arrow.flip { transform: scaleY(-1); }
+
       .mid-l {
         grid-area: mid-l;
         border-right: 0.1px solid #e0e0e0;
@@ -227,16 +153,18 @@
         padding: 24px 0;
       }
 
-      .pixel-arrow.flip { transform: scaleY(-1); }
-
       .mid-r {
         grid-area: mid-r;
         padding: 28px;
         display: flex;
         flex-direction: column;
         gap: 20px;
-        overflow: hidden;
+        overflow-y: auto;
       }
+
+      .mid-r::-webkit-scrollbar { width: 4px; }
+      .mid-r::-webkit-scrollbar-track { background: transparent; }
+      .mid-r::-webkit-scrollbar-thumb { background: #83bc91; }
 
       .features-heading {
         font-family: "Silkscreen", monospace;
@@ -245,12 +173,7 @@
         letter-spacing: 0.05em;
       }
 
-      .features-list {
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-      }
+      .features-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
 
       .feature-item {
         display: flex;
@@ -271,10 +194,7 @@
         transition: background-color 200ms ease, border-color 200ms ease;
       }
 
-      .feature-item.active .feature-box {
-        background-color: #83bc91;
-        border-color: #83bc91;
-      }
+      .feature-item.active .feature-box { background-color: #83bc91; border-color: #83bc91; }
 
       /* ── Retro Border Button ── */
       .btn-wrapper {
@@ -286,12 +206,7 @@
         width: 100%;
       }
 
-      .retro-btn {
-        display: flex;
-        width: 100%;
-        cursor: pointer;
-        user-select: none;
-      }
+      .retro-btn { display: flex; width: 100%; cursor: pointer; user-select: none; }
 
       .retro-btn-inner {
         position: relative;
@@ -301,16 +216,9 @@
         transition: padding-bottom 80ms ease, padding-right 80ms ease;
       }
 
-      .retro-btn.pressed .retro-btn-inner {
-        padding-bottom: 2px;
-        padding-right: 2px;
-      }
+      .retro-btn.pressed .retro-btn-inner { padding-bottom: 2px; padding-right: 2px; }
 
-      .retro-btn-shadow {
-        position: absolute;
-        inset: 0;
-        border: 1px solid #83bc91;
-      }
+      .retro-btn-shadow { position: absolute; inset: 0; border: 1px solid #83bc91; }
 
       .retro-btn-front {
         position: relative;
@@ -328,11 +236,7 @@
         letter-spacing: 0.08em;
       }
 
-      .retro-btn-front img {
-        width: 20px;
-        height: 20px;
-        object-fit: contain;
-      }
+      .retro-btn-front img { width: 20px; height: 20px; object-fit: contain; }
 
       .btn-subtext {
         font-family: "Silkscreen", monospace;
@@ -342,8 +246,82 @@
         text-align: center;
       }
 
-      .right     { grid-area: right;    border-left:   0.1px solid #e0e0e0; }
+      /* ── Privacy & Terms pages ── */
+      #page-privacy,
+      #page-terms {
+        grid-template-areas: "left  pcontent  pcontent  right";
+        grid-template-columns: 1fr 2fr 2fr 1fr;
+        grid-template-rows: 1fr;
+      }
 
+      .privacy-content {
+        grid-area: pcontent;
+        padding: 32px 28px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .privacy-content::-webkit-scrollbar { width: 4px; }
+      .privacy-content::-webkit-scrollbar-track { background: transparent; }
+      .privacy-content::-webkit-scrollbar-thumb { background: #83bc91; }
+
+      .privacy-title {
+        font-family: "Silkscreen", monospace;
+        font-size: 32px;
+        color: #e0e0e0;
+        line-height: 1.6;
+        letter-spacing: 0.05em;
+      }
+
+      .privacy-updated {
+        font-family: "Silkscreen", monospace;
+        font-size: 10px;
+        color: #e0e0e090;
+        letter-spacing: 0.05em;
+        margin-top: -16px;
+      }
+
+      .privacy-section { display: flex; flex-direction: column; gap: 10px; }
+
+      .privacy-section-heading {
+        font-family: "Silkscreen", monospace;
+        font-size: 13px;
+        color: #83bc91;
+        letter-spacing: 0.05em;
+      }
+
+      .privacy-body {
+        font-family: "Silkscreen", monospace;
+        font-size: 10px;
+        color: #e0e0e0;
+        letter-spacing: 0.04em;
+        line-height: 2;
+      }
+
+      .privacy-note {
+        font-family: "Silkscreen", monospace;
+        font-size: 9px;
+        color: #e0e0e090;
+        letter-spacing: 0.04em;
+        line-height: 2;
+        border-top: 0.1px solid #e0e0e030;
+        padding-top: 16px;
+      }
+
+      @media (max-width: 768px) {
+        #page-privacy {
+          grid-template-areas: "pcontent";
+          grid-template-columns: 1fr;
+        }
+        #page-terms {
+          grid-template-areas: "pcontent";
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── BOR peeking ── */
       .bor-peaking {
         position: absolute;
         bottom: -10px;
@@ -354,7 +332,145 @@
         z-index: 0;
       }
 
+      /* ── Pricing page ── */
+      #page-pricing {
+        grid-template-areas:
+          "left    ptop      ptop     right"
+          "left    monthly   lifetime right";
+        grid-template-columns: 1fr 2fr 2fr 1fr;
+        grid-template-rows: auto 1fr;
+      }
+
+      .pricing-top {
+        grid-area: ptop;
+        border-bottom: 0.1px solid #e0e0e0;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 28px;
+      }
+
+      .pricing-heading {
+        font-family: "Silkscreen", monospace;
+        font-size: 32px;
+        color: #e0e0e0;
+        line-height: 1.6;
+        letter-spacing: 0.05em;
+        text-align: left;
+      }
+
+      .pricing-subtitle {
+        font-family: "Silkscreen", monospace;
+        font-size: 13px;
+        color: #e0e0e0;
+        letter-spacing: 0.05em;
+        line-height: 1.8;
+        text-align: left;
+      }
+
+      .pricing-monthly {
+        grid-area: monthly;
+        border-right: 0.1px solid #e0e0e0;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow-y: auto;
+      }
+
+      .pricing-lifetime {
+        grid-area: lifetime;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow-y: auto;
+      }
+
+      .plan-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .plan-label {
+        font-family: "Silkscreen", monospace;
+        font-size: 13px;
+        color: #e0e0e0;
+        letter-spacing: 0.05em;
+      }
+
+      .best-value-badge {
+        font-family: "Silkscreen", monospace;
+        font-size: 8px;
+        color: #141414;
+        letter-spacing: 0.05em;
+        background-color: #83bc91;
+        border: 1px solid #83bc91;
+        padding: 4px 8px;
+      }
+
+      .plan-price {
+        font-family: "Silkscreen", monospace;
+        font-size: 52px;
+        color: #83bc91;
+        letter-spacing: 0.02em;
+        text-align: center;
+        align-self: center;
+      }
+
+      .plan-footer {
+        font-family: "Silkscreen", monospace;
+        font-size: 13px;
+        color: #e0e0e0;
+        letter-spacing: 0.05em;
+      }
+
+      /* ── Responsive ── */
       @media (max-width: 768px) {
+        body { padding: 16px; }
+
+        #page-home {
+          grid-template-areas:
+            "center-t center-t"
+            "mid-l    mid-r";
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: auto 1fr;
+        }
+
+        .left, .right { display: none; }
+        .center-t h1 { font-size: 22px; }
+
+        #page-pricing {
+          grid-template-areas:
+            "ptop    ptop"
+            "monthly lifetime";
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: auto 1fr;
+        }
+
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: 60px;
+          left: 0;
+          right: 0;
+          flex-direction: column;
+          align-items: flex-start;
+          background-color: #141414;
+          border-bottom: 0.1px solid #e0e0e0;
+          padding: 20px 24px;
+          gap: 18px;
+          z-index: 10;
+          font-size: 11px;
+        }
+
+        .nav-links.open { display: flex; }
+        .nav-sep { display: none; }
+        .nav-hamburger { display: flex; }
+
         .bor-peaking {
           width: 110px;
           right: auto;
@@ -362,9 +478,34 @@
           transform: translateX(-50%);
           bottom: -6px;
         }
+
+        .plan-price { font-size: 36px; }
       }
 
       @media (max-width: 480px) {
+        .nav-brand { font-size: 14px; }
+        .card { border-radius: 16px; height: auto; min-height: 80vh; }
+
+        #page-home {
+          grid-template-areas:
+            "center-t"
+            "mid-l"
+            "mid-r";
+          grid-template-columns: 1fr;
+          grid-template-rows: auto 1fr 1fr;
+        }
+
+        .center-t h1 { font-size: 18px; }
+
+        .mid-l {
+          border-right: none;
+          border-bottom: 0.1px solid #e0e0e0;
+          flex-direction: row;
+          padding: 20px 0;
+        }
+
+        .mid-r { padding-bottom: 80px; }
+
         .bor-peaking {
           width: 110px;
           right: auto;
@@ -373,23 +514,37 @@
           bottom: -6px;
         }
 
-        .mid-r { padding-bottom: 80px; }
+        #page-pricing {
+          grid-template-areas:
+            "ptop"
+            "monthly"
+            "lifetime";
+          grid-template-columns: 1fr;
+          grid-template-rows: auto 1fr 1fr;
+        }
+
+        .pricing-monthly { border-right: none; border-bottom: 0.1px solid #e0e0e0; }
+        .plan-price { font-size: 28px; }
+        .pricing-lifetime { padding-bottom: 80px; }
+        .privacy-content { padding-bottom: 80px; }
       }
     </style>
   </head>
   <body>
     <div class="card">
+
+      <!-- Header -->
       <div class="header">
         <span class="nav-brand">BOR</span>
 
         <nav class="nav-links">
-          <a href="#" class="active">HOME</a>
+          <a href="#" class="active" data-page="home">HOME</a>
           <span class="nav-sep">/</span>
-          <a href="#">PRICING</a>
+          <a href="#" data-page="pricing">PRICING</a>
           <span class="nav-sep">/</span>
-          <a href="#">PRIVACY</a>
+          <a href="#" data-page="privacy">PRIVACY</a>
           <span class="nav-sep">/</span>
-          <a href="#">TERMS</a>
+          <a href="#" data-page="terms">TERMS</a>
         </nav>
 
         <div style="display:flex; align-items:center; gap:16px;">
@@ -402,79 +557,233 @@
         </div>
       </div>
 
-      <div class="left"></div>
-      <div class="center-t">
-        <h1>Gain control of your life by focusing on what matters_</h1>
-      </div>
-      <div class="mid-l">
-        <!-- up arrow (down arrow flipped) -->
-        <div class="pixel-arrow flip" id="arrow-up">
-          <div class="pixel-arrow-layer pa-shadow">
-            <div class="pa-row" style="left:0px;    top:0px;    width:65px;"></div>
-            <div class="pa-row" style="left:6.5px;  top:6.5px;  width:52px;"></div>
-            <div class="pa-row" style="left:13px;   top:13px;   width:39px;"></div>
-            <div class="pa-row" style="left:19.5px; top:19.5px; width:26px;"></div>
-            <div class="pa-row" style="left:22.75px;top:26px;   width:19.5px;"></div>
-          </div>
-          <div class="pixel-arrow-layer pa-front">
-            <div class="pa-row" style="left:6.5px;  top:0px;    width:52px;"></div>
-            <div class="pa-row" style="left:13px;   top:6.5px;  width:39px;"></div>
-            <div class="pa-row" style="left:19.5px; top:13px;   width:26px;"></div>
-            <div class="pa-row" style="left:26px;   top:19.5px; width:13px;"></div>
-            <div class="pa-row" style="left:29.25px;top:26px;   width:6.5px;"></div>
-          </div>
-        </div>
-        <!-- down arrow -->
-        <div class="pixel-arrow" id="arrow-down">
-          <div class="pixel-arrow-layer pa-shadow">
-            <div class="pa-row" style="left:0px;    top:0px;    width:65px;"></div>
-            <div class="pa-row" style="left:6.5px;  top:6.5px;  width:52px;"></div>
-            <div class="pa-row" style="left:13px;   top:13px;   width:39px;"></div>
-            <div class="pa-row" style="left:19.5px; top:19.5px; width:26px;"></div>
-            <div class="pa-row" style="left:22.75px;top:26px;   width:19.5px;"></div>
-          </div>
-          <div class="pixel-arrow-layer pa-front">
-            <div class="pa-row" style="left:6.5px;  top:0px;    width:52px;"></div>
-            <div class="pa-row" style="left:13px;   top:6.5px;  width:39px;"></div>
-            <div class="pa-row" style="left:19.5px; top:13px;   width:26px;"></div>
-            <div class="pa-row" style="left:26px;   top:19.5px; width:13px;"></div>
-            <div class="pa-row" style="left:29.25px;top:26px;   width:6.5px;"></div>
-          </div>
-        </div>
-      </div>
-      <div class="mid-r">
-        <p class="features-heading">FEATURES</p>
-        <ul class="features-list">
-          <li class="feature-item active"><span class="feature-box"></span>RETRO STYLE HOME PAGE</li>
-          <li class="feature-item"><span class="feature-box"></span>DAILY TASK ORGANISER</li>
-          <li class="feature-item"><span class="feature-box"></span>FOCUS SESSION TIMER</li>
-          <li class="feature-item"><span class="feature-box"></span>DISTRACTIONS</li>
-          <li class="feature-item"><span class="feature-box"></span>TASK STATISTICS</li>
-          <li class="feature-item"><span class="feature-box"></span>SESSION STREAK CALENDAR</li>
-          <li class="feature-item"><span class="feature-box"></span>LEADERBOARD</li>
-          <li class="feature-item"><span class="feature-box"></span>AVATAR STORE</li>
-        </ul>
+      <!-- Home page -->
+      <div id="page-home" class="page active">
+        <div class="left"></div>
 
-        <div class="btn-wrapper">
-          <div class="retro-btn" id="retroBtn">
-            <div class="retro-btn-inner">
-              <div class="retro-btn-shadow"></div>
-              <div class="retro-btn-front">
-                <img src="apple.png" alt="Apple" />
-                DOWNLOAD ON IOS
-              </div>
+        <div class="center-t">
+          <h1>Gain control of your life by focusing on what matters_</h1>
+        </div>
+
+        <div class="mid-l">
+          <div class="pixel-arrow flip" id="arrow-up">
+            <div class="pixel-arrow-layer pa-shadow">
+              <div class="pa-row" style="left:0px;    top:0px;    width:65px;"></div>
+              <div class="pa-row" style="left:6.5px;  top:6.5px;  width:52px;"></div>
+              <div class="pa-row" style="left:13px;   top:13px;   width:39px;"></div>
+              <div class="pa-row" style="left:19.5px; top:19.5px; width:26px;"></div>
+              <div class="pa-row" style="left:22.75px;top:26px;   width:19.5px;"></div>
+            </div>
+            <div class="pixel-arrow-layer pa-front">
+              <div class="pa-row" style="left:6.5px;  top:0px;    width:52px;"></div>
+              <div class="pa-row" style="left:13px;   top:6.5px;  width:39px;"></div>
+              <div class="pa-row" style="left:19.5px; top:13px;   width:26px;"></div>
+              <div class="pa-row" style="left:26px;   top:19.5px; width:13px;"></div>
+              <div class="pa-row" style="left:29.25px;top:26px;   width:6.5px;"></div>
             </div>
           </div>
-          <p class="btn-subtext">NO CREDIT CARD REQUIRED</p>
+          <div class="pixel-arrow" id="arrow-down">
+            <div class="pixel-arrow-layer pa-shadow">
+              <div class="pa-row" style="left:0px;    top:0px;    width:65px;"></div>
+              <div class="pa-row" style="left:6.5px;  top:6.5px;  width:52px;"></div>
+              <div class="pa-row" style="left:13px;   top:13px;   width:39px;"></div>
+              <div class="pa-row" style="left:19.5px; top:19.5px; width:26px;"></div>
+              <div class="pa-row" style="left:22.75px;top:26px;   width:19.5px;"></div>
+            </div>
+            <div class="pixel-arrow-layer pa-front">
+              <div class="pa-row" style="left:6.5px;  top:0px;    width:52px;"></div>
+              <div class="pa-row" style="left:13px;   top:6.5px;  width:39px;"></div>
+              <div class="pa-row" style="left:19.5px; top:13px;   width:26px;"></div>
+              <div class="pa-row" style="left:26px;   top:19.5px; width:13px;"></div>
+              <div class="pa-row" style="left:29.25px;top:26px;   width:6.5px;"></div>
+            </div>
+          </div>
         </div>
+
+        <div class="mid-r">
+          <p class="features-heading">FEATURES</p>
+          <ul class="features-list">
+            <li class="feature-item active"><span class="feature-box"></span>RETRO STYLE HOME PAGE</li>
+            <li class="feature-item"><span class="feature-box"></span>DAILY TASK ORGANISER</li>
+            <li class="feature-item"><span class="feature-box"></span>FOCUS SESSION TIMER</li>
+            <li class="feature-item"><span class="feature-box"></span>DISTRACTIONS LOG</li>
+            <li class="feature-item"><span class="feature-box"></span>TASK STATISTICS</li>
+            <li class="feature-item"><span class="feature-box"></span>SESSION STREAK CALENDAR</li>
+            <li class="feature-item"><span class="feature-box"></span>LEADERBOARD</li>
+            <li class="feature-item"><span class="feature-box"></span>AVATAR STORE</li>
+          </ul>
+          <div class="btn-wrapper">
+            <div class="retro-btn" id="retroBtn">
+              <div class="retro-btn-inner">
+                <div class="retro-btn-shadow"></div>
+                <div class="retro-btn-front">
+                  <img src="apple.png" alt="Apple" />
+                  DOWNLOAD ON IOS
+                </div>
+              </div>
+            </div>
+            <p class="btn-subtext">NO CREDIT CARD REQUIRED</p>
+          </div>
+        </div>
+
+        <div class="right"></div>
       </div>
-      <div class="right"></div>
+
+      <!-- Pricing page -->
+      <div id="page-pricing" class="page">
+        <div class="left"></div>
+
+        <div class="pricing-top">
+          <p class="pricing-heading">PRICING</p>
+          <p class="pricing-subtitle">ALL FEATURES INCLUDED. FREE TIER IS CAPPED AT 3 TASKS. GO PRO FOR UNLIMITED.</p>
+        </div>
+
+        <div class="pricing-monthly">
+          <p class="plan-label">MONTHLY</p>
+          <p class="plan-price">$5.99</p>
+          <p class="plan-footer">PER MONTH. CANCEL ANYTIME</p>
+        </div>
+
+        <div class="pricing-lifetime">
+          <div class="plan-header">
+            <p class="plan-label">LIFE TIME</p>
+            <span class="best-value-badge">BEST VALUE</span>
+          </div>
+          <p class="plan-price">$24.99</p>
+          <p class="plan-footer">PAY ONCE. OWN IT FOREVER</p>
+        </div>
+
+        <div class="right"></div>
+      </div>
+
+      <!-- Privacy page -->
+      <div id="page-privacy" class="page">
+        <div class="left"></div>
+        <div class="privacy-content">
+          <p class="privacy-title">PRIVACY NOTICE</p>
+          <p class="privacy-updated">LAST UPDATED: 01/05/2026</p>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">WHAT WE COLLECT</p>
+            <p class="privacy-body">We collect the information you provide during sign-up (display name, email or Apple ID token) and the data you create inside the app (tasks, focus sessions, distraction labels). We also collect basic analytics events to understand how the app is used.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">WHAT WE DO NOT COLLECT</p>
+            <p class="privacy-body">We do not sell your data. We do not share your data with advertisers. We do not read the content of your distraction labels for any purpose other than displaying them back to you.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">HOW WE STORE YOUR DATA</p>
+            <p class="privacy-body">Your data is stored in Supabase (Frankfurt, EU) with row-level security enabled. Only you can read or write your own records. Automatic daily cleanup removes distraction entries at midnight UTC.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">THIRD-PARTY SERVICES</p>
+            <p class="privacy-body">BOR uses RevenueCat to process subscriptions. Each third-party service operates under its own privacy policy. None of them receive your personally identifiable information beyond what is necessary to function.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">DATA RETENTION</p>
+            <p class="privacy-body">Your account data is retained for as long as your account is active. You may request deletion of your account and all associated data at any time via Menu → Delete Account. Deletion is permanent and cannot be undone.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">YOUR RIGHTS</p>
+            <p class="privacy-body">Depending on your jurisdiction you may have the right to access, correct, or delete your personal data. To exercise any of these rights, contact us at dinu.eknomos@gmail.com.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">CHANGES TO THIS NOTICE</p>
+            <p class="privacy-body">We may update this privacy notice from time to time. The updated version will be available inside the app and on this page. Continued use of BOR after changes constitutes acceptance of the revised notice.</p>
+          </div>
+
+          <p class="privacy-note">* This notice applies to BOR (www.borfocus.xyz)</p>
+        </div>
+        <div class="right"></div>
+      </div>
+
+      <!-- Terms page -->
+      <div id="page-terms" class="page">
+        <div class="left"></div>
+        <div class="privacy-content">
+          <p class="privacy-title">TERMS OF SERVICE</p>
+          <p class="privacy-updated">LAST UPDATED: 01/05/2026</p>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">ACCEPTANCE OF TERMS</p>
+            <p class="privacy-body">By creating an account or using BOR (www.borfocus.xyz), you agree to these Terms of Service. If you do not agree, do not use the app.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">ELIGIBILITY</p>
+            <p class="privacy-body">You must be at least 13 years old to use BOR. By using the app you confirm that you meet this requirement.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">YOUR ACCOUNT</p>
+            <p class="privacy-body">You are responsible for maintaining the confidentiality of your account. You agree to provide accurate information during sign-up and to keep your display name appropriate. We reserve the right to suspend accounts that violate these terms.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">SUBSCRIPTIONS & BILLING</p>
+            <p class="privacy-body">BOR offers a monthly plan ($5.99/month) and a lifetime access option ($24.99). Subscriptions are managed through Apple's App Store and processed by RevenueCat. To cancel your monthly subscription, go to Settings → Apple ID → Subscriptions on your iPhone. Refunds are handled in accordance with Apple's refund policy.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">ACCEPTABLE USE</p>
+            <p class="privacy-body">You agree not to misuse the app, attempt to reverse-engineer any part of it, interfere with its infrastructure, or use it for any unlawful purpose. Logs, streaks, and leaderboard rankings must be earned through legitimate use only.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">USER CONTENT</p>
+            <p class="privacy-body">Any content you enter into BOR (task names, distraction labels, display name) remains yours. By entering it you grant us a limited licence to store and display it back to you as part of the service. We do not claim ownership of your content.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">INTELLECTUAL PROPERTY</p>
+            <p class="privacy-body">All app design, pixel art, mascot (Bor), copy, and code are the intellectual property of the developer. You may not reproduce, distribute, or create derivative works from any part of BOR without written permission.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">DISCLAIMERS</p>
+            <p class="privacy-body">BOR is provided as-is. We make no guarantees about uptime, data preservation, or fitness for a particular purpose. We are not liable for any loss of data, lost productivity, or indirect damages arising from use of the app.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">TERMINATION</p>
+            <p class="privacy-body">We may suspend or terminate your access if you violate these terms. You may delete your account at any time via Menu → Delete Account. Upon deletion all your data is permanently removed.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">CHANGES TO THESE TERMS</p>
+            <p class="privacy-body">We may update these terms from time to time. The current version will always be available inside the app and on this page. Continued use after changes constitutes acceptance of the revised terms.</p>
+          </div>
+
+          <div class="privacy-section">
+            <p class="privacy-section-heading">CONTACT</p>
+            <p class="privacy-body">Questions about these terms can be directed to dinu.eknomos@gmail.com.</p>
+          </div>
+
+          <p class="privacy-note">* These terms apply to BOR (www.borfocus.xyz)</p>
+        </div>
+        <div class="right"></div>
+      </div>
+
+      <!-- Always-visible peeking character -->
       <img src="bor-peaking.png" class="bor-peaking" alt="BOR peeking" />
+
     </div>
     <script>
-      const navLinks = document.querySelectorAll('.nav-links a');
-      const navMenu  = document.querySelector('.nav-links');
+      const navLinks  = document.querySelectorAll('.nav-links a');
+      const navMenu   = document.querySelector('.nav-links');
       const hamburger = document.getElementById('hamburger');
+
+      function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const target = document.getElementById('page-' + pageId);
+        if (target) target.classList.add('active');
+      }
 
       hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('open');
@@ -486,6 +795,7 @@
           e.preventDefault();
           navLinks.forEach(l => l.classList.remove('active'));
           link.classList.add('active');
+          showPage(link.dataset.page);
           hamburger.classList.remove('open');
           navMenu.classList.remove('open');
         });
@@ -500,9 +810,7 @@
         featureItems[activeIndex].classList.add('active');
       }
 
-      featureItems.forEach((item, i) => {
-        item.addEventListener('click', () => setActive(i));
-      });
+      featureItems.forEach((item, i) => item.addEventListener('click', () => setActive(i)));
 
       const retroBtn = document.getElementById('retroBtn');
       retroBtn.addEventListener('pointerdown', () => retroBtn.classList.add('pressed'));
@@ -514,7 +822,7 @@
 
       document.querySelectorAll('.pixel-arrow').forEach(arrow => {
         arrow.addEventListener('pointerdown', () => arrow.classList.add('pressed'));
-        arrow.addEventListener('pointerleave',() => arrow.classList.remove('pressed'));
+        arrow.addEventListener('pointerleave', () => arrow.classList.remove('pressed'));
         arrow.addEventListener('pointerup', () => {
           arrow.classList.remove('pressed');
           if (arrow.id === 'arrow-up')   setActive(activeIndex - 1);
