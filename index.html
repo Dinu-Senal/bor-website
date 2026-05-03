@@ -229,7 +229,53 @@
 
       .pixel-arrow.flip { transform: scaleY(-1); }
 
-      .mid-r     { grid-area: mid-r; }
+      .mid-r {
+        grid-area: mid-r;
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        overflow: hidden;
+      }
+
+      .features-heading {
+        font-family: "Silkscreen", monospace;
+        font-size: 15px;
+        color: #e0e0e0;
+        letter-spacing: 0.05em;
+      }
+
+      .features-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: "Silkscreen", monospace;
+        font-size: 13px;
+        color: #e0e0e0;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+      }
+
+      .feature-box {
+        width: 16px;
+        height: 16px;
+        border: 1.5px solid #83bc91;
+        flex-shrink: 0;
+        transition: background-color 200ms ease, border-color 200ms ease;
+      }
+
+      .feature-item.active .feature-box {
+        background-color: #83bc91;
+        border-color: #83bc91;
+      }
+
       .right     { grid-area: right;    border-left:   0.1px solid #e0e0e0; }
     </style>
   </head>
@@ -264,7 +310,7 @@
       </div>
       <div class="mid-l">
         <!-- up arrow (down arrow flipped) -->
-        <div class="pixel-arrow flip" data-arrow>
+        <div class="pixel-arrow flip" id="arrow-up">
           <div class="pixel-arrow-layer pa-shadow">
             <div class="pa-row" style="left:0px;    top:0px;    width:65px;"></div>
             <div class="pa-row" style="left:6.5px;  top:6.5px;  width:52px;"></div>
@@ -281,7 +327,7 @@
           </div>
         </div>
         <!-- down arrow -->
-        <div class="pixel-arrow" data-arrow>
+        <div class="pixel-arrow" id="arrow-down">
           <div class="pixel-arrow-layer pa-shadow">
             <div class="pa-row" style="left:0px;    top:0px;    width:65px;"></div>
             <div class="pa-row" style="left:6.5px;  top:6.5px;  width:52px;"></div>
@@ -298,7 +344,19 @@
           </div>
         </div>
       </div>
-      <div class="mid-r"></div>
+      <div class="mid-r">
+        <p class="features-heading">FEATURES</p>
+        <ul class="features-list">
+          <li class="feature-item active"><span class="feature-box"></span>RETRO STYLE HOME PAGE</li>
+          <li class="feature-item"><span class="feature-box"></span>DAILY TASK ORGANISER</li>
+          <li class="feature-item"><span class="feature-box"></span>FOCUS SESSION TIMER</li>
+          <li class="feature-item"><span class="feature-box"></span>DISTRACTIONS</li>
+          <li class="feature-item"><span class="feature-box"></span>TASK STATISTICS</li>
+          <li class="feature-item"><span class="feature-box"></span>SESSION STREAK CALENDAR</li>
+          <li class="feature-item"><span class="feature-box"></span>LEADERBOARD</li>
+          <li class="feature-item"><span class="feature-box"></span>AVATAR STORE</li>
+        </ul>
+      </div>
       <div class="right"></div>
     </div>
     <script>
@@ -321,10 +379,27 @@
         });
       });
 
+      const featureItems = document.querySelectorAll('.feature-item');
+      let activeIndex = 0;
+
+      function setActive(index) {
+        featureItems[activeIndex].classList.remove('active');
+        activeIndex = Math.max(0, Math.min(featureItems.length - 1, index));
+        featureItems[activeIndex].classList.add('active');
+      }
+
+      featureItems.forEach((item, i) => {
+        item.addEventListener('click', () => setActive(i));
+      });
+
       document.querySelectorAll('.pixel-arrow').forEach(arrow => {
         arrow.addEventListener('pointerdown', () => arrow.classList.add('pressed'));
-        arrow.addEventListener('pointerup',   () => arrow.classList.remove('pressed'));
         arrow.addEventListener('pointerleave',() => arrow.classList.remove('pressed'));
+        arrow.addEventListener('pointerup', () => {
+          arrow.classList.remove('pressed');
+          if (arrow.id === 'arrow-up')   setActive(activeIndex - 1);
+          if (arrow.id === 'arrow-down') setActive(activeIndex + 1);
+        });
       });
     </script>
   </body>
