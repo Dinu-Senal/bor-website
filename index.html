@@ -19,6 +19,29 @@
         padding: 32px;
       }
 
+      /* ── CRT power-on ── */
+      @keyframes crt-on {
+        0%,  25% { transform: scaleY(0.01); filter: brightness(3); }
+        75%      { transform: scaleY(1);    filter: brightness(1.2); }
+        100%     { transform: scaleY(1);    filter: brightness(1); }
+      }
+
+      /* ── Page glitch ── */
+      @keyframes glitch-out {
+        0%,  40%  { transform: translateX(0);    opacity: 1; }
+        41%, 75%  { transform: translateX(-2px); opacity: 0.5; }
+        76%, 100% { transform: translateX(0);    opacity: 0; }
+      }
+
+      @keyframes glitch-in {
+        0%,  30%  { transform: translateX(2px);  opacity: 0; }
+        31%, 70%  { transform: translateX(-1px); opacity: 0.5; }
+        71%, 100% { transform: translateX(0);    opacity: 1; }
+      }
+
+      .page.glitch-out { animation: glitch-out 180ms linear forwards; }
+      .page.glitch-in  { animation: glitch-in  220ms linear forwards; }
+
       /* ── Card ── */
       .card {
         width: 100%;
@@ -30,6 +53,8 @@
         position: relative;
         display: flex;
         flex-direction: column;
+        transform-origin: center center;
+        animation: crt-on 700ms ease-out forwards;
       }
 
       /* ── Header ── */
@@ -780,9 +805,16 @@
       const hamburger = document.getElementById('hamburger');
 
       function showPage(pageId) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        const target = document.getElementById('page-' + pageId);
-        if (target) target.classList.add('active');
+        const current = document.querySelector('.page.active');
+        const target  = document.getElementById('page-' + pageId);
+        if (!target || current === target) return;
+
+        current.classList.add('glitch-out');
+        setTimeout(() => {
+          current.classList.remove('active', 'glitch-out');
+          target.classList.add('active', 'glitch-in');
+          setTimeout(() => target.classList.remove('glitch-in'), 220);
+        }, 180);
       }
 
       hamburger.addEventListener('click', () => {
