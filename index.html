@@ -276,6 +276,72 @@
         border-color: #83bc91;
       }
 
+      /* ── Retro Border Button ── */
+      .btn-wrapper {
+        margin-top: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+      }
+
+      .retro-btn {
+        display: flex;
+        width: 100%;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .retro-btn-inner {
+        position: relative;
+        flex: 1;
+        padding-bottom: 12px;
+        padding-right: 8px;
+        transition: padding-bottom 80ms ease, padding-right 80ms ease;
+      }
+
+      .retro-btn.pressed .retro-btn-inner {
+        padding-bottom: 2px;
+        padding-right: 2px;
+      }
+
+      .retro-btn-shadow {
+        position: absolute;
+        inset: 0;
+        border: 1px solid #83bc91;
+      }
+
+      .retro-btn-front {
+        position: relative;
+        width: 100%;
+        height: 52px;
+        border: 1px solid #83bc91;
+        background-color: #141414;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-family: "Silkscreen", monospace;
+        font-size: 11px;
+        color: #83bc91;
+        letter-spacing: 0.08em;
+      }
+
+      .retro-btn-front img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+      }
+
+      .btn-subtext {
+        font-family: "Silkscreen", monospace;
+        font-size: 9px;
+        color: #e0e0e0;
+        letter-spacing: 0.08em;
+        text-align: center;
+      }
+
       .right     { grid-area: right;    border-left:   0.1px solid #e0e0e0; }
     </style>
   </head>
@@ -356,6 +422,19 @@
           <li class="feature-item"><span class="feature-box"></span>LEADERBOARD</li>
           <li class="feature-item"><span class="feature-box"></span>AVATAR STORE</li>
         </ul>
+
+        <div class="btn-wrapper">
+          <div class="retro-btn" id="retroBtn">
+            <div class="retro-btn-inner">
+              <div class="retro-btn-shadow"></div>
+              <div class="retro-btn-front">
+                <img src="apple.png" alt="Apple" />
+                DOWNLOAD ON IOS
+              </div>
+            </div>
+          </div>
+          <p class="btn-subtext">NO CREDIT CARD REQUIRED</p>
+        </div>
       </div>
       <div class="right"></div>
     </div>
@@ -390,6 +469,14 @@
 
       featureItems.forEach((item, i) => {
         item.addEventListener('click', () => setActive(i));
+      });
+
+      const retroBtn = document.getElementById('retroBtn');
+      retroBtn.addEventListener('pointerdown', () => retroBtn.classList.add('pressed'));
+      retroBtn.addEventListener('pointerleave', () => retroBtn.classList.remove('pressed'));
+      retroBtn.addEventListener('pointerup', () => {
+        retroBtn.classList.remove('pressed');
+        window.open('https://apps.apple.com/app/id6764517474', '_blank');
       });
 
       document.querySelectorAll('.pixel-arrow').forEach(arrow => {
