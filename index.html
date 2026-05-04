@@ -926,10 +926,19 @@
       const navMenu   = document.querySelector('.nav-links');
       const hamburger = document.getElementById('hamburger');
 
-      function showPage(pageId) {
+      function showPage(pageId, pushState = true) {
         const current = document.querySelector('.page.active');
         const target  = document.getElementById('page-' + pageId);
         if (!target || current === target) return;
+
+        if (pushState) {
+          const path = pageId === 'home' ? '/' : '/' + pageId;
+          window.history.pushState({ page: pageId }, '', path);
+        }
+
+        navLinks.forEach(l => l.classList.remove('active'));
+        const activeLink = document.querySelector(`.nav-links a[data-page="${pageId}"]`);
+        if (activeLink) activeLink.classList.add('active');
 
         current.classList.add('glitch-out');
         setTimeout(() => {
@@ -939,6 +948,22 @@
         }, 180);
       }
 
+      window.addEventListener('popstate', e => {
+        showPage(e.state?.page || 'home', false);
+      });
+
+      // Show correct page on direct URL load
+      const initPage = window.location.pathname.replace(/^\//, '') || 'home';
+      const initTarget = document.getElementById('page-' + initPage);
+      if (initTarget && !initTarget.classList.contains('active')) {
+        document.querySelector('.page.active').classList.remove('active');
+        initTarget.classList.add('active');
+        navLinks.forEach(l => l.classList.remove('active'));
+        const initLink = document.querySelector(`.nav-links a[data-page="${initPage}"]`);
+        if (initLink) initLink.classList.add('active');
+      }
+      window.history.replaceState({ page: initPage }, '', window.location.pathname);
+
       hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('open');
         navMenu.classList.toggle('open');
@@ -947,8 +972,6 @@
       navLinks.forEach(link => {
         link.addEventListener('click', e => {
           e.preventDefault();
-          navLinks.forEach(l => l.classList.remove('active'));
-          link.classList.add('active');
           showPage(link.dataset.page);
           hamburger.classList.remove('open');
           navMenu.classList.remove('open');
