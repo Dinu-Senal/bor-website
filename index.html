@@ -123,7 +123,15 @@
         position: relative;
       }
 
-      .left     { grid-area: left;     border-right:  0.1px solid #e0e0e0; }
+      .left {
+        grid-area: left;
+        border-right: 0.1px solid #e0e0e0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 20px 8px;
+      }
       .right    { grid-area: right;    border-left:   0.1px solid #e0e0e0; }
 
       .center-t {
@@ -577,6 +585,64 @@
         .pricing-lifetime { padding-bottom: 80px; }
         .privacy-content { padding-bottom: 80px; }
       }
+      /* ── Info page ── */
+      #page-info {
+        grid-template-areas: "left  icontent  icontent  right";
+        grid-template-columns: 1fr 2fr 2fr 1fr;
+        grid-template-rows: 1fr;
+      }
+
+      .built-by {
+        font-family: "Silkscreen", monospace;
+        font-size: 11px;
+        color: #e0e0e050;
+        letter-spacing: 0.05em;
+        line-height: 2;
+        text-align: center;
+      }
+
+      .built-by a {
+        color: #e0e0e090;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .built-by a:hover { color: #83bc91; }
+
+      .info-content {
+        grid-area: icontent;
+        padding: 32px 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .info-title {
+        font-family: "Silkscreen", monospace;
+        font-size: 32px;
+        color: #e0e0e0;
+        line-height: 1.6;
+        letter-spacing: 0.05em;
+      }
+
+      .info-email {
+        font-family: "Silkscreen", monospace;
+        font-size: 11px;
+        color: #e0e0e0;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        user-select: none;
+      }
+
+      .info-email:hover { color: #83bc91; }
+
+      @media (max-width: 768px) {
+        #page-info {
+          grid-template-areas: "icontent";
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
@@ -594,6 +660,8 @@
           <a href="#" data-page="privacy">PRIVACY</a>
           <span class="nav-sep">/</span>
           <a href="#" data-page="terms">TERMS</a>
+          <span class="nav-sep">/</span>
+          <a href="#" data-page="info">INFO</a>
         </nav>
 
         <div style="display:flex; align-items:center; gap:16px;">
@@ -608,7 +676,9 @@
 
       <!-- Home page -->
       <div id="page-home" class="page active">
-        <div class="left"></div>
+        <div class="left">
+          <p class="built-by">BUILT BY: <a href="https://dinu-senal-sendanayake.vercel.app/" target="_blank">DINU SENAL</a></p>
+        </div>
 
         <div class="center-t">
           <h1>Gain control of your life by focusing on what matters_</h1>
@@ -685,7 +755,9 @@
 
       <!-- Pricing page -->
       <div id="page-pricing" class="page">
-        <div class="left"></div>
+        <div class="left">
+          <p class="built-by">BUILT BY: <a href="https://dinu-senal-sendanayake.vercel.app/" target="_blank">DINU SENAL</a></p>
+        </div>
 
         <div class="pricing-top">
           <p class="pricing-heading">PRICING</p>
@@ -712,7 +784,9 @@
 
       <!-- Privacy page -->
       <div id="page-privacy" class="page">
-        <div class="left"></div>
+        <div class="left">
+          <p class="built-by">BUILT BY: <a href="https://dinu-senal-sendanayake.vercel.app/" target="_blank">DINU SENAL</a></p>
+        </div>
         <div class="privacy-content">
           <p class="privacy-title">PRIVACY NOTICE</p>
           <p class="privacy-updated">LAST UPDATED: 01/05/2026</p>
@@ -759,7 +833,9 @@
 
       <!-- Terms page -->
       <div id="page-terms" class="page">
-        <div class="left"></div>
+        <div class="left">
+          <p class="built-by">BUILT BY: <a href="https://dinu-senal-sendanayake.vercel.app/" target="_blank">DINU SENAL</a></p>
+        </div>
         <div class="privacy-content">
           <p class="privacy-title">TERMS OF SERVICE</p>
           <p class="privacy-updated">LAST UPDATED: 01/05/2026</p>
@@ -820,6 +896,18 @@
           </div>
 
           <p class="privacy-note">* These terms apply to BOR (www.borfocus.xyz)</p>
+        </div>
+        <div class="right"></div>
+      </div>
+
+      <!-- Info page -->
+      <div id="page-info" class="page">
+        <div class="left">
+          <p class="built-by">BUILT BY: <a href="https://dinu-senal-sendanayake.vercel.app/" target="_blank">DINU SENAL</a></p>
+        </div>
+        <div class="info-content">
+          <p class="info-title">INFO</p>
+          <p class="info-email" id="contactEmail">CONTACT: DINU.EKNOMOS@GMAIL.COM</p>
         </div>
         <div class="right"></div>
       </div>
@@ -898,6 +986,14 @@
       retroBtn.addEventListener('pointerup', () => {
         retroBtn.classList.remove('pressed');
         window.open('https://apps.apple.com/app/id6764517474', '_blank');
+      });
+
+      const contactEmail = document.getElementById('contactEmail');
+      contactEmail.addEventListener('click', () => {
+        navigator.clipboard.writeText('dinu.eknomos@gmail.com').then(() => {
+          contactEmail.textContent = 'COPIED';
+          setTimeout(() => { contactEmail.textContent = 'CONTACT: DINU.EKNOMOS@GMAIL.COM'; }, 2000);
+        });
       });
 
       document.querySelectorAll('.pixel-arrow').forEach(arrow => {
